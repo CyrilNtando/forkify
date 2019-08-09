@@ -2,6 +2,7 @@ import { elements, renderLoader, clearLoader } from './views/base';
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
+import * as recipeView from './views/RecipeView';
 
 /** *global state of App
  * -Search object
@@ -48,10 +49,12 @@ elements.searchResPages.addEventListener('click', e => {
 const controlRecipe = async () => {
   //Get id from url
   const id = window.location.hash.replace('#', '');
-  console.log(id);
   if (id) {
     //prepare UI fro changes
-
+    recipeView.clearRecipe();
+    renderLoader(elements.recipe);
+    //highlight selected search item
+    if (state.search) searchView.highlightSelected(id);
     //Create new recipe object
     state.recipe = new Recipe(id);
     //Get recipe data
@@ -62,15 +65,16 @@ const controlRecipe = async () => {
       state.recipe.calcServings();
       state.recipe.parseIngredients();
       //Render recipe
-      console.log(state.recipe);
+      clearLoader();
+      recipeView.renderRecipe(state.recipe);
     } catch (error) {
       alert('Erorr processing recipe!');
     }
   }
 };
-// window.addEventListener('hashchange', controlRecipe);
+window.addEventListener('hashchange', controlRecipe);
 // window.addEventListener('load', controlRecipe);
 //shorthand
-['hashchange', 'load'].forEach(event => {
-  window.addEventListener(event, controlRecipe);
-});
+// ['hashchange', 'load'].forEach(event => {
+//   window.addEventListener(event, controlRecipe);
+// });
