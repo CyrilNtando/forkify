@@ -78,3 +78,19 @@ window.addEventListener('hashchange', controlRecipe);
 // ['hashchange', 'load'].forEach(event => {
 //   window.addEventListener(event, controlRecipe);
 // });
+
+//handling recipe button clicks
+
+elements.recipe.addEventListener('click', e => {
+  if (e.target.matches('.btn-decrease, .btn-decrease *')) {
+    //Decrease servings
+    if (state.recipe.servings > 1) {
+      state.recipe.upadateServings('dec');
+      recipeView.updateServingsIngredients(state.recipe);
+    }
+  } else if (e.target.matches('.btn-increase,.btn-increase *')) {
+    //increase servings
+    state.recipe.upadateServings('inc');
+    recipeView.updateServingsIngredients(state.recipe);
+  }
+});
