@@ -70,7 +70,7 @@ const controlRecipe = async () => {
       state.recipe.parseIngredients();
       //Render recipe
       clearLoader();
-      recipeView.renderRecipe(state.recipe, state.likes ? state.likes.isLiked(id) : false);
+      recipeView.renderRecipe(state.recipe, state.likes.isLiked(id));
     } catch (error) {
       alert('Erorr processing recipe!');
     }
@@ -109,7 +109,6 @@ elements.shopping.addEventListener('click', e => {
   }
 });
 
-state.likes ? likeView.toggleLikeMenu(state.likes.getNumLikes()) : likeView.toggleLikeMenu(0);
 /*****Like CONTROLLER */
 const controlLike = () => {
   if (!state.likes) state.likes = new Likes();
@@ -141,11 +140,22 @@ const controlLike = () => {
   likeView.toggleLikeMenu(state.likes.getNumLikes());
 };
 
+//Restore Liked recipes on page load
+window.addEventListener('load', () => {
+  state.likes = new Likes();
+  state.likes.readStorage();
+
+  likeView.toggleLikeMenu(state.likes.getNumLikes());
+  //render existing likes
+  state.likes.likes.forEach(like => likeView.renderLike(like));
+});
+
 elements.recipe.addEventListener('click', e => {
   if (e.target.matches('.btn-decrease, .btn-decrease *')) {
     //Decrease servings
     if (state.recipe.servings > 1) {
       state.recipe.upadateServings('dec');
+
       recipeView.updateServingsIngredients(state.recipe);
     }
   } else if (e.target.matches('.btn-increase,.btn-increase *')) {
