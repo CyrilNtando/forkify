@@ -15,10 +15,10 @@ export const highlightSelected = id => {
   resultArr.forEach(el => {
     el.classList.remove('results__link--active');
   });
-  document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+  document.querySelector(`.results__link[href="#${id}"]`).classList.add('results__link--active');
 };
 
-const limitRecipeTitle = (title, limit = 17) => {
+export const limitRecipeTitle = (title, limit = 17) => {
   const newTtile = [];
   if (title.length > limit) {
     //@param callback function and accumulator(returned value) of 0
